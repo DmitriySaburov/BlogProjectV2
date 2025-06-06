@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
 
+from mptt.models import MPTTModel, TreeForeignKey
+
 
 
 class Post(models.Model):
@@ -10,9 +12,15 @@ class Post(models.Model):
     STATUS_OPTIONS = (("published", "Опубликовано"), ("draft", "Черновик"))
     
     title = models.CharField(verbose_name="Название статьи", max_length=255)
-    slug = models.SlugField(verbose_name="URL", max_length=255, blank=True, unique=True)
+    slug = models.SlugField(verbose_name="URL статьи", max_length=255, blank=True, unique=True)
     description = models.TextField(verbose_name="Краткое описание статьи", max_length=500)
     text = models.TextField(verbose_name="Полный текст статьи")
+    category = TreeForeignKey(
+        "Category",
+        verbose_name="Категория",
+        on_delete=models.PROTECT,
+        related_name="posts"
+    )
     thumbnail = models.ImageField(
         verbose_name="Изображение статьи",
         default="default.jpg",
@@ -53,6 +61,35 @@ class Post(models.Model):
         indexes = [models.Index(fields=["-fixed", "-create", "status"])]
         verbose_name = "Статья"
         verbose_name_plural = "Статьи"
+    
+    def __str__(self):
+        return f"{self.title}"
+
+
+class Category(MPTTModel):
+    """Модель категорий с вложенностью"""
+    
+    title = models.CharField(verbose_name="Название категории", max_length=255)
+    slug = models.SlugField(verbose_name="URL категории", max_length=255, blank=True)
+    description = models.TextField(verbose_name="Описание категории", max_length=300)
+    parent = TreeForeignKey(
+        "self",
+        verbose_name="Родительская категория",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        db_index=True,
+        related_name="children"
+    )
+    
+    class MPTTMeta:
+        """Сортировка по вложенности"""
+        order_insertion_by = ("title", )
+    
+    class Meta:
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
+        db_table = "app_categories"
     
     def __str__(self):
         return f"{self.title}"

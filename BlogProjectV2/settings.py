@@ -33,6 +33,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # сторонние
+    "mptt",
+    "django_mptt_admin",
+    # созданные
     "apps.blog.apps.BlogConfig",
     "apps.accounts.apps.AccountsConfig",
 ]
