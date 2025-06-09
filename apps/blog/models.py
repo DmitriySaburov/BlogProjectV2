@@ -69,7 +69,6 @@ class Post(models.Model):
         return f"{self.title}"
     
     def get_absolute_url(self):
-        """Получить url путь к статье"""
         return reverse("post_detail", kwargs={"slug": self.slug})
     
     def save(self, *args, **kwargs):
@@ -106,3 +105,6 @@ class Category(MPTTModel):
     
     def __str__(self):
         return f"{self.title}"
+    
+    def get_absolute_url(self):
+        return reverse("post_by_category", kwargs={"slug": self.slug})
