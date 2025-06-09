@@ -1,8 +1,11 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 from mptt.models import MPTTModel, TreeForeignKey
+
+from apps.services.utils import unique_slugify
 
 
 
@@ -12,7 +15,7 @@ class Post(models.Model):
     STATUS_OPTIONS = (("published", "Опубликовано"), ("draft", "Черновик"))
     
     title = models.CharField(verbose_name="Название статьи", max_length=255)
-    slug = models.SlugField(verbose_name="URL статьи", max_length=255, blank=True, unique=True)
+    slug = models.SlugField(verbose_name="URL статьи", max_length=255, blank=True)
     description = models.TextField(verbose_name="Краткое описание статьи", max_length=500)
     text = models.TextField(verbose_name="Полный текст статьи")
     category = TreeForeignKey(
@@ -64,6 +67,16 @@ class Post(models.Model):
     
     def __str__(self):
         return f"{self.title}"
+    
+    def get_absolute_url(self):
+        """Получить url путь к статье"""
+        return reverse("post_detail", kwargs={"slug": self.slug})
+    
+    def save(self, *args, **kwargs):
+        """Переопределили метод save. При сохранении статью генерируем slug и проверяем на уникальность"""
+        self.slug = unique_slugify(self, self.title, self.slug)
+        super().save(*args, **kwargs)
+    
 
 
 class Category(MPTTModel):

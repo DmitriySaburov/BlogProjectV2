@@ -5,8 +5,11 @@ from django_mptt_admin.admin import DjangoMpttAdmin
 from .models import Post, Category
 
 
-# Админ-панель для модели постов
-admin.site.register(Post)
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    """Админ-панель модели статей"""
+    prepopulated_fields = {"slug": ("title", )}
 
 
 @admin.register(Category)
