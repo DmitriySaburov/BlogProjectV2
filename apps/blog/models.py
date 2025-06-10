@@ -23,7 +23,12 @@ class Post(models.Model):
     STATUS_OPTIONS = (("published", "Опубликовано"), ("draft", "Черновик"))
     
     title = models.CharField(verbose_name="Название статьи", max_length=255)
-    slug = models.SlugField(verbose_name="URL статьи", max_length=255, blank=True)
+    slug = models.SlugField(
+        verbose_name="URL статьи",
+        max_length=255,
+        blank=True,
+        unique=True
+    )
     description = models.TextField(verbose_name="Краткое описание статьи", max_length=500)
     text = models.TextField(verbose_name="Полный текст статьи")
     category = TreeForeignKey(
@@ -84,7 +89,7 @@ class Post(models.Model):
         return reverse("post_detail", kwargs={"slug": self.slug})
     
     def save(self, *args, **kwargs):
-        """Переопределили метод save. При сохранении статью генерируем slug и проверяем на уникальность"""
+        """Переопределили метод save. При сохранении статьи генерируем slug и проверяем на уникальность"""
         self.slug = unique_slugify(self, self.title, self.slug)
         super().save(*args, **kwargs)
     
