@@ -13,8 +13,8 @@ class PostManager(models.Manager):
     """Менеджер для модели статей"""
     
     def get_queryset(self):
-        """Список опубликованных постов"""
-        return super().get_queryset().filter(status="published")
+        """Список только опубликованных постов. Используем select_related() чтобы сразу запросить необходиммые связанные данные"""
+        return super().get_queryset().select_related("author", "category").filter(status="published")
     
 
 class Post(models.Model):

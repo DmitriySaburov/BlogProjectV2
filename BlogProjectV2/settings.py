@@ -23,6 +23,19 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# необходимо для debug_toolbar
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+# если будут проблемы с отображением toolbar, то добавть это: (только для тестирования)
+"""
+def show_toolbar(request):
+    return True
+
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+}
+"""
 
 # Application definition
 
@@ -36,6 +49,7 @@ INSTALLED_APPS = [
     # сторонние
     "mptt",
     "django_mptt_admin",
+    "debug_toolbar",
     # созданные
     "apps.blog.apps.BlogConfig",
     "apps.accounts.apps.AccountsConfig",
@@ -49,6 +63,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # сторонние
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'BlogProjectV2.urls'
