@@ -9,6 +9,14 @@ from apps.services.utils import unique_slugify
 
 
 
+class PostManager(models.Manager):
+    """Менеджер для модели статей"""
+    
+    def get_queryset(self):
+        """Список опубликованных постов"""
+        return super().get_queryset().filter(status="published")
+    
+
 class Post(models.Model):
     """Модель статей для блога"""
     
@@ -57,6 +65,10 @@ class Post(models.Model):
         related_name="updater_posts"
     )
     fixed = models.BooleanField(verbose_name="Прикреплено", default=False)
+    
+    # менеджеры
+    objects = models.Manager()
+    published = PostManager()
     
     class Meta:
         db_table = "blog_post"
