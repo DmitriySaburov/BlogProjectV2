@@ -25,7 +25,7 @@ class ProfileUpdateView(UpdateView):
     form_class = ProfileUpdateForm
     template_name = "accounts/profile_edit.html"
     
-    def get_object(self, queryset = None):
+    def get_object(self, queryset=None):
         """Определяет, какой объект профиля нужно редактировать"""
         return self.request.user.profile
     
@@ -57,4 +57,4 @@ class ProfileUpdateView(UpdateView):
         return super().form_valid(form)
     
     def get_success_url(self):
-        return reverse_lazy("profile_detail", kwargs={"slug": self.object.slug})
+        return reverse_lazy('profile_detail', kwargs={'slug': self.object.slug})
