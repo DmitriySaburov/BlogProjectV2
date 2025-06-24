@@ -27,7 +27,7 @@ class PostUpdateForm(PostCreateForm):
     
     class Meta:
         model = Post
-        fields = PostCreateForm.Meta.fields + ("updater", "fixed")
+        fields = PostCreateForm.Meta.fields + ("fixed", )
     
     def __init__(self, *args, **kwargs):
         """Обновление стилей формы под Bootstrap"""
