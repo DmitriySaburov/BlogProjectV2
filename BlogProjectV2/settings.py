@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "mptt",
     "django_mptt_admin",
     "debug_toolbar",
+    "taggit",
     # созданные
     "apps.blog.apps.BlogConfig",
     "apps.accounts.apps.AccountsConfig",
