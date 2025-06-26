@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "django_mptt_admin",
     "debug_toolbar",
     "taggit",
+    "django_recaptcha",
     # созданные
     "apps.blog.apps.BlogConfig",
     "apps.accounts.apps.AccountsConfig",
@@ -152,3 +153,6 @@ MEDIA_ROOT = (BASE_DIR / "media")
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
