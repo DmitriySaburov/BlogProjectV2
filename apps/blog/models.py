@@ -5,6 +5,7 @@ from django.urls import reverse
 
 from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
+from ckeditor.fields import RichTextField
 
 from apps.services.utils import unique_slugify
 
@@ -23,15 +24,25 @@ class Post(models.Model):
     
     STATUS_OPTIONS = (("published", "Опубликовано"), ("draft", "Черновик"))
     
-    title = models.CharField(verbose_name="Название статьи", max_length=255)
+    title = models.CharField(
+        verbose_name="Название статьи",
+        max_length=255
+    )
     slug = models.SlugField(
         verbose_name="URL статьи",
         max_length=255,
         blank=True,
         unique=True
     )
-    description = models.TextField(verbose_name="Краткое описание статьи", max_length=500)
-    text = models.TextField(verbose_name="Полный текст статьи")
+    description = RichTextField(
+        config_name='awesome_ckeditor',
+        verbose_name="Краткое описание статьи",
+        max_length=500
+    )
+    text = RichTextField(
+        config_name='awesome_ckeditor',
+        verbose_name="Полный текст статьи"
+    )
     category = TreeForeignKey(
         "Category",
         verbose_name="Категория",
@@ -53,8 +64,14 @@ class Post(models.Model):
         default="published",
         max_length=10
     )
-    create = models.DateTimeField(verbose_name="Время добавления", auto_now_add=True)
-    update = models.DateTimeField(verbose_name="Время обновления", auto_now=True)
+    create = models.DateTimeField(
+        verbose_name="Время добавления",
+        auto_now_add=True
+    )
+    update = models.DateTimeField(
+        verbose_name="Время обновления",
+        auto_now=True
+    )
     author = models.ForeignKey(
         verbose_name="Автор",
         to=User,
@@ -70,7 +87,10 @@ class Post(models.Model):
         blank=True,
         related_name="updater_posts"
     )
-    fixed = models.BooleanField(verbose_name="Прикреплено", default=False)
+    fixed = models.BooleanField(
+        verbose_name="Прикреплено",
+        default=False
+    )
     
     # менеджеры
     objects = models.Manager()

@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "taggit",
     "django_recaptcha",
+    "ckeditor_uploader",
+    "ckeditor",
     # созданные
     "apps.blog.apps.BlogConfig",
     "apps.accounts.apps.AccountsConfig",
@@ -148,6 +150,14 @@ STATICFILES_DIRS = [BASE_DIR / "templates/js/"]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = (BASE_DIR / "media")
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_CONFIGS = {
+    "awesome_ckeditor": {
+        "toolbar": "full",
+        "height": 300,
+    }
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

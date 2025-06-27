@@ -11,6 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("apps.blog.urls")),
     path("", include("apps.accounts.urls")),
+    path("ckeditor/", include("ckeditor_uploader.urls")),
 ]
 
 # в режиме отладки добавляем медиа и статик
