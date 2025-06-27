@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import JsonResponse
@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 
 from taggit.models import Tag
 
-from .models import Post, Category
+from .models import Post, Category, Rating
 from .forms import PostCreateForm, PostUpdateForm, CommentCreateForm
 from ..services.mixins import AuthorRequiredMixin
 
@@ -152,3 +152,35 @@ class PostByTagListView(ListView):
         content = super().get_context_data(**kwargs)
         content["title"] = f"Статьи по тегу: {self.tag.name}"
         return content
+
+
+class RatingCreateView(View):
+    model = Rating
+    
+    def post(self, request, *args, **kwargs):
+        post_id = request.POST.get("post_id")
+        value = int(request.POST.get("value"))
+        x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(",")[0]
+        else:
+            ip = request.META.get("REMOTE_ADDR")
+        if request.user.is_authenticated:
+            user = request.user
+        else:
+            user = None
+        
+        rating, created = self.model.objects.get_or_create(
+            post_id=post_id,
+            ip_address=ip,
+            defaults={"value": value, "user": user}
+        )
+        
+        if not created:
+            if rating.value == value:
+                rating.delete()
+            else:
+                rating.value = value
+                rating.user = user
+                rating.save()
+        return JsonResponse({"rating_sum": rating.post.get_sum_rating()})
