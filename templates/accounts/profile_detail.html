@@ -16,8 +16,12 @@
                 <div class="card-text">
                     <ul>
                         <li>Никнейм: {{ profile.user.username }}</li>
-                        {% if profile.user.get_full_name %} <li>Имя и фамилия: {{ profile.user.get_full_name }}</li> {% endif %}
-                        <li>Заходил: {{ profile.user.last_login }}</li>
+                        {% if profile.user.get_full_name %}
+                            <li>Имя и фамилия: {{ profile.user.get_full_name }}</li>
+                        {% else %}
+                            <li>Имя: {{ profile.user.get_short_name }}</li>
+                        {% endif %}
+                        <li>Заходил: {{ profile.user.last_login }} | {% if profile.is_online %}Онлайн{% else %}Не в сети{% endif %}</li>
                         <li>Дата рождения: {{ profile.birth_date }}</li>
                         <li>О себе: {{ profile.bio }}</li>
                     </ul>

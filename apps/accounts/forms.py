@@ -118,4 +118,3 @@ class UserLoginForm(AuthenticationForm):
         self.fields['password'].widget.attrs['placeholder'] = 'Пароль пользователя'
         self.fields['password'].widget.attrs['class'] = 'form-control'
         self.fields['username'].label = 'Логин'
-

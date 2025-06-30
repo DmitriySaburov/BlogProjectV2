@@ -69,9 +69,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # сторонние
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # созданные
+    "apps.accounts.middleware.ActiveUserMiddleware",
 ]
 
 ROOT_URLCONF = 'BlogProjectV2.urls'
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": BASE_DIR / "cache",
+    }
+}
 
 TEMPLATES = [
     {
